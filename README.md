@@ -37,4 +37,4 @@ public function GroupedProducts() {
 
 You can traverse `has_one`, `has_many` and `many_many` relations using dot notation.
 
-You can even traverse multiple relations at once. For example, `$GroupedProducts.GroupedBy('Manufacturer.Employees.FavouriteTeam.Name')` would return a list of products grouped by the names of the favourite teams of the employees of the product's manufacturer.
+You can even traverse multiple relations at once. For example, `$GroupedProducts.GroupedBy('Manufacturer.Employees.FavouriteTeam.Name')` would return a list of products grouped by the names of the favourite teams of the employees of the product’s manufacturer.
