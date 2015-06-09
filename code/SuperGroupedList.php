@@ -3,27 +3,13 @@
 class SuperGroupedList extends GroupedList {
 
 	/**
-	 * The current item we're trying to extract data from. Easier to store it here
-	 * than pass it down through recursive method calls.
-	 * @var mixed
-	 */
-	protected $currentItem = null;
-
-	/**
-	 * The list of grouped items we've managed to extract. Easier to store it here
-	 * than pass it down and back up through recursive method calls.
-	 * @var array
-	 */
-	protected $extractedParts = array();
-
-	/**
 	 * @param string $index
-	 * @param string $children
+	 * @param string $childrenKey
 	 * @return ArrayList
 	 */
-	public function GroupedBy($index, $children = 'Children') {
+	public function GroupedBy($index, $childrenKey = 'Children') {
 		if(strpos($index, '.') === false) {
-			return parent::GroupedBy($index, $children);
+			return parent::GroupedBy($index, $childrenKey);
 		}
 
 		$grouped = $this->groupBy($index);
@@ -33,12 +19,10 @@ class SuperGroupedList extends GroupedList {
 		$relations = explode('.', $index);
 		$key = array_pop($relations);
 
-		foreach($grouped as $indVal => $list) {
+		foreach($grouped as $indexValue => $list) {
 			$list = self::create($list);
-			$result->push(new ArrayData(array(
-				$key => $indVal,
-				$children => $list
-			)));
+			$data = new ArrayData(array($key => $indexValue, $childrenKey => $list));
+			$result->push($data);
 		}
 
 		return $result;
@@ -58,43 +42,51 @@ class SuperGroupedList extends GroupedList {
 			throw new Exception("I don't know how to traverse relations on instances of " . get_class($list) . " :(");
 		}
 
+		$result = array();
 		$relations = explode('.', $index);
 		foreach($list as $item) {
-			$this->currentItem = $item;
-			$this->extract($item, $relations);
+			$this->extractInto($result, $item, $item, $relations);
 		}
 
-		return $this->extractedParts;
+		return $result;
 	}
 
 	/**
 	 * Recursively try to find the index for the current item, and store the current
 	 * item against that index.
-	 * @param mixed $item
-	 * @param array $relationParts
+	 * @param array &$result The array of results
+	 * @param mixed $originalItem The original item we're trying to group
+	 * @param mixed $currentItem The current item we're traversing
+	 * @param array $relationParts Array containing relation/field names to be traversed
 	 */
-	protected function extract($item, $relationParts) {
+	protected function extractInto(array &$result, $originalItem, $currentItem, array $relationParts) {
 		$part = array_shift($relationParts);
 
-		if($item->has_one($part)) {
-			$this->extract($item->getComponent($part), $relationParts);
-		} elseif($item->has_many($part)) {
-			$components = $item->getComponents($part);
+		if($currentItem->has_one($part)) {
+			// If this is a has_one relation, we can just jump straight to it
+			$this->extractInto($result, $originalItem, $currentItem->getComponent($part), $relationParts);
+		} elseif($currentItem->has_many($part)) {
+			// For a has_many we need to iterate over each component and extract relations from it
+			$components = $currentItem->getComponents($part);
 			foreach($components as $component) {
-				$this->extract($component, $relationParts);
+				$this->extractInto($result, $originalItem, $component, $relationParts);
 			}
-		} elseif($item->many_many($part)) {
-			$components = $item->getManyManyComponents($part);
+		} elseif($currentItem->many_many($part)) {
+			// For a many_many we need to iterate over each component and extract relations from it
+			$components = $currentItem->getManyManyComponents($part);
 			foreach($components as $component) {
-				$this->extract($component, $relationParts);
+				$this->extractInto($result, $originalItem, $component, $relationParts);
 			}
 		} else {
-			$key = $item->hasMethod($part) ? $item->$part() : $item->$part;
+			// If this isn't a relation, it must be a field, so extract the data from it
+			$key = $currentItem->hasMethod($part) ? $currentItem->$part() : $currentItem->$part;
 
-			if(array_key_exists($key, $this->extractedParts)) {
-				$this->extractedParts[$key]->push($this->currentItem);
+			if(array_key_exists($key, $result)) {
+				if( ! $result[$key]->find('ID', $originalItem->ID)) {
+					$result[$key]->push($originalItem);
+				}
 			} else {
-				$this->extractedParts[$key] = new ArrayList(array($this->currentItem));
+				$result[$key] = new ArrayList(array($originalItem));
 			}
 		}
 	}

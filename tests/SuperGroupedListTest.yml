@@ -1,0 +1,41 @@
+SuperGroupedListTest_Company:
+  company1:
+    Name: Bigfork Ltd
+  company2:
+    Name: Littlespork Ltd
+SuperGroupedListTest_Person:
+  person1:
+    Name: John Smith
+    Age: 40
+    Employer: =>SuperGroupedListTest_Company.company1
+  person2:
+    Name: James Smith
+    Age: 50
+    Employer: =>SuperGroupedListTest_Company.company2
+  person3:
+    Name: Jenny Smith
+    Age: 40
+    Employer: =>SuperGroupedListTest_Company.company1
+SuperGroupedListTest_Category:
+  homeentertainment:
+    Name: Home Entertainment
+  electricals:
+    Name: Electricals
+  kitchen:
+    Name: Kitchen
+SuperGroupedListTest_Product:
+  bigtv:
+    Name: Big TV
+    Price: 750
+    Categories: =>SuperGroupedListTest_Category.homeentertainment,=>SuperGroupedListTest_Category.electricals
+    Manufacturer: =>SuperGroupedListTest_Company.company1
+  smalltv:
+    Name: Small TV
+    Price: 250
+    Categories: =>SuperGroupedListTest_Category.homeentertainment,=>SuperGroupedListTest_Category.electricals
+    Manufacturer: =>SuperGroupedListTest_Company.company1
+  kettle:
+    Name: Kettle
+    Price: 20
+    Categories: =>SuperGroupedListTest_Category.kitchen,=>SuperGroupedListTest_Category.electricals
+    Manufacturer: =>SuperGroupedListTest_Company.company2
