@@ -35,6 +35,6 @@ public function GroupedProducts() {
 <% end_loop %>
 ```
 
-You can traverse `has_one`, `has_many` and `many_many` relations using dot notation.
+You can traverse `has_one`, `has_many` and `many_many` relations using dot notation. The last part of the notation you provide (`Title` in the example above) will be both the field that’s extracted from the final component, and the `$Variable` used to access that field inside the loop.
 
 You can even traverse multiple relations at once. For example, `$GroupedProducts.GroupedBy('Manufacturer.Employees.FavouriteTeam.Name')` would return a list of products grouped by the names of the favourite teams of the employees of the product’s manufacturer.
