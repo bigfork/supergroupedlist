@@ -1,0 +1,20 @@
+{
+	"name": "bigfork/supergroupedlist",
+	"description": "An extension of SilverStripe’s GroupedList that supports traversing relations",
+	"type": "silverstripe-module",
+	"homepage": "https://github.com/bigfork/supergroupedlist",
+	"keywords": ["silverstripe", "groupedlist", "grouped", "list"],
+	"authors": [
+		{
+			"name": "Loz Calver",
+			"email": "lozcalver@bigfork.co.uk"
+		}
+	],
+	"license": "BSD-3-Clause",
+	"support": {
+		"issues": "https://github.com/bigfork/supergroupedlist/issues"
+	},
+	"require": {
+		"silverstripe/framework": "^3.1"
+	}
+}
