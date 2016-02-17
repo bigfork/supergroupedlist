@@ -41,7 +41,7 @@ class SuperGroupedList extends GroupedList
         }
 
         $list = $this->getList();
-        if (! $list instanceof DataList) {
+        if (!$list instanceof DataList) {
             throw new Exception("I don't know how to traverse relations on instances of " . get_class($list) . " :(");
         }
 
@@ -86,7 +86,7 @@ class SuperGroupedList extends GroupedList
             $key = $currentItem->hasMethod($part) ? $currentItem->$part() : $currentItem->$part;
 
             if (array_key_exists($key, $result)) {
-                if (! $result[$key]->find('ID', $originalItem->ID)) {
+                if (!$result[$key]->find('ID', $originalItem->ID)) {
                     $result[$key]->push($originalItem);
                 }
             } else {
