@@ -1,11 +1,11 @@
-#SuperGroupedList#
+# SuperGroupedList #
 [![Build Status](https://travis-ci.org/bigfork/supergroupedlist.png?branch=master)](https://travis-ci.org/bigfork/supergroupedlist) [![Latest Stable Version](https://poser.pugx.org/bigfork/supergroupedlist/v/stable.png)](https://packagist.org/packages/bigfork/supergroupedlist) [![Total Downloads](https://poser.pugx.org/bigfork/supergroupedlist/downloads.png)](https://packagist.org/packages/bigfork/supergroupedlist) [![License](https://poser.pugx.org/bigfork/supergroupedlist/license.png)](https://packagist.org/packages/bigfork/supergroupedlist)
 
 An extension of SilverStripe’s GroupedList that supports traversing relations.
 
 **Note:** depending on your data, the same items may be output multiple times. For example if a product belongs to multiple categories, and you group by category title, then the product will show under each of the categories that it belongs to.
 
-###Installation###
+### Installation ###
 
 ```
 composer require bigfork/supergroupedlist ^1.0
@@ -13,7 +13,7 @@ composer require bigfork/supergroupedlist ^1.0
 
 Or download and extract to a folder named `supergroupedlist` in your document root.
 
-###Usage###
+### Usage ###
 
 Use exactly as you would use `GroupedList`, but with dot-notation to traverse relations:
 
